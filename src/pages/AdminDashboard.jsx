@@ -4,6 +4,31 @@ import { useAuth } from '../auth/AuthProvider'
 import '../styles/admin.scss'
 import ConfirmModal from '../components/ConfirmModal';
 
+
+export const DISABILITIES = [
+  { value: 'none',       label: 'بدون' },
+  { value: 'visual',     label: 'بصرية' },
+  { value: 'hearing',    label: 'سمعية' },
+  { value: 'intellectual', label: 'ذهنية' },
+  { value: 'autism',     label: 'طيف التوحد' },
+  { value: 'learning',   label: 'صعوبات تعلم' },
+  { value: 'speech',     label: 'نطق/لغة' },
+  { value: 'adhd',       label: 'فرط حركة/نقص انتباه' },
+  { value: 'physical',   label: 'حركية' },
+  { value: 'multiple',   label: 'متعددة' },
+  { value: 'other',      label: 'أخرى' },
+];
+
+export const PLAN_TYPES = [
+  { value: 'iep',        label: 'خطة فردية (IEP)' },
+  { value: 'behavior',   label: 'خطة سلوكية' },
+  { value: 'remedial',   label: 'خطة علاجية/تقوية' },
+  { value: 'support',    label: 'خطة دعم' },
+  { value: 'gifted',     label: 'خطة للموهوبين' },
+  { value: 'rehab',      label: 'تأهيلية' },
+  { value: 'other',      label: 'أخرى' },
+];
+
 export default function AdminDashboard() {
   const { signOut } = useAuth()
   const [tab, setTab] = useState('teachers')
@@ -44,6 +69,10 @@ const [busyAssignTab, setBusyAssignTab] = useState(false);
 const [errAssignTab, setErrAssignTab] = useState('');
 const [filterGrade, setFilterGrade] = useState('');   // لفلترة الأهداف المعروضة
 const [newObjGrade, setNewObjGrade] = useState('');   // الصف عند إضافة هدف جديد
+const [studentDisability, setStudentDisability] = useState('')
+const [studentPlan, setStudentPlan] = useState('')
+const [filterDisability, setFilterDisability] = useState('');
+const [filterPlan, setFilterPlan] = useState('');
 
 const [confirm, setConfirm] = useState({
   open: false,
@@ -73,25 +102,18 @@ async function runConfirm() {
 }
 
 const GRADES = Array.from({ length: 12 }, (_, i) => String(i + 1));
+// 1) طلاب المعلّم (مباشرةً من جدول students عبر teacher_id)
 useEffect(() => {
   if (!selTeacher) { setTStudents([]); return; }
   (async () => {
     try {
       setBusyAssignTab(true); setErrAssignTab('');
-      const { data: sos, error } = await supabase
-        .from('student_objectives_status')
-        .select('student_id')
-        .eq('teacher_id', selTeacher);
-      if (error) throw error;
-
-      const ids = [...new Set((sos||[]).map(r=>r.student_id))];
-      if (ids.length === 0) { setTStudents([]); return; }
-      const { data: studs, error: e2 } = await supabase
+      const { data: studs, error } = await supabase
         .from('students')
         .select('id, full_name')
-        .in('id', ids)
+        .eq('teacher_id', selTeacher)
         .order('full_name', { ascending: true });
-      if (e2) throw e2;
+      if (error) throw error;
       setTStudents(studs || []);
     } catch (e) {
       setErrAssignTab(e.message);
@@ -99,6 +121,7 @@ useEffect(() => {
     } finally { setBusyAssignTab(false); }
   })();
 }, [selTeacher]);
+
 
 useEffect(() => {
   if (!selTeacher || !selStudent) { setTSubjects([]); return; }
@@ -280,30 +303,29 @@ async function loadTeachers() {
     setLoading(true);
     setErrorMsg('');
 
+    // المعلّمين
     const { data: teachersData, error: e1 } = await supabase
       .from('profiles')
       .select('id, full_name, role, created_at')
       .eq('role', 'teacher')
       .order('created_at', { ascending: false });
-
     if (e1) throw e1;
 
-    const { data: sos, error: e2 } = await supabase
-      .from('student_objectives_status')
-      .select('teacher_id, student_id');
-
+    // عدّ الطلاب لكل معلّم من جدول students
+    const { data: studCounts, error: e2 } = await supabase
+      .from('students')
+      .select('teacher_id, id'); // يكفي لجلب teacher_id ثم نعدّها محليًا
     if (e2) throw e2;
 
-    const counts = new Map(); // teacher_id -> Set(student_id)
-    for (const row of sos || []) {
-      if (!row.teacher_id) continue;
-      if (!counts.has(row.teacher_id)) counts.set(row.teacher_id, new Set());
-      counts.get(row.teacher_id).add(row.student_id);
+    const countMap = new Map(); // teacher_id -> count
+    for (const s of (studCounts || [])) {
+      if (!s.teacher_id) continue;
+      countMap.set(s.teacher_id, (countMap.get(s.teacher_id) || 0) + 1);
     }
 
     const withCounts = (teachersData || []).map(t => ({
       ...t,
-      student_count: counts.get(t.id)?.size || 0
+      student_count: countMap.get(t.id) || 0,
     }));
 
     setTeachers(withCounts);
@@ -314,6 +336,7 @@ async function loadTeachers() {
     setLoading(false);
   }
 }
+
 
 
   useEffect(() => {
@@ -330,8 +353,9 @@ async function loadStudents() {
   const { data, error } = await supabase
     .from('students')
     .select(`
-      id, full_name, grade, teacher_id,
+      id, full_name, grade, disability, plan_type, teacher_id,
       teacher:profiles!students_teacher_id_fkey (id, full_name)
+      
     `)
     .order('full_name', { ascending: true })
 
@@ -384,6 +408,8 @@ async function addStudent() {
     full_name: studentName.trim(),
     grade: studentGrade || null,
     teacher_id: studentTeacher || null,
+    disability: studentDisability || null,
+    plan_type: studentPlan || null,
   };
 
   const { error } = await supabase.from('students').insert(payload);
@@ -392,6 +418,8 @@ async function addStudent() {
   setStudentName('');
   setStudentGrade('');
   setStudentTeacher(''); 
+  setStudentDisability('');
+setStudentPlan('');
   loadStudents();
 }
 
@@ -618,6 +646,17 @@ async function assign() {
     <option key={t.id} value={t.id}>{t.full_name}</option>
   ))}
 </select>
+  {/* الإعاقة */}
+  <select value={studentDisability} onChange={e=>setStudentDisability(e.target.value)}>
+    <option value="">الإعاقة (اختياري)</option>
+    {DISABILITIES.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
+  </select>
+
+  {/* نوع الخطة */}
+  <select value={studentPlan} onChange={e=>setStudentPlan(e.target.value)}>
+    <option value="">نوع الخطة (اختياري)</option>
+    {PLAN_TYPES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+  </select>
 
        <button
   onClick={() => {
@@ -643,6 +682,8 @@ async function assign() {
           <th style={{textAlign:'left'}}>Name</th>
           <th>Grade</th>
           <th>Teacher</th>
+             <th>Disability</th>
+   <th>Plan</th>
           <th style={{width:120, textAlign:'right'}}>Actions</th>
         </tr>
       </thead>
@@ -657,12 +698,16 @@ async function assign() {
           <tr key={s.id}>
             <td style={{textAlign:'left'}}>{s.full_name}</td>
             <td>{s.grade || '—'}</td>
+                {/* <td>{(DISABILITIES.find(d=>d.value===s.disability)?.label) || '—'}</td>
+   <td>{(PLAN_TYPES.find(p=>p.value===s.plan_type)?.label) || '—'}</td> */}
             <td>
               {(() => {
                 const t = teachers.find(x => x.id === s.teacher_id)
                 return t ? (t.full_name || '—') : '—'
               })()}
             </td>
+               <td>{(DISABILITIES.find(d=>d.value===s.disability)?.label) || '—'}</td>
+    <td>{(PLAN_TYPES.find(p=>p.value===s.plan_type)?.label) || '—'}</td>
             <td style={{textAlign:'right'}}>
               <button
   className="danger"
@@ -854,6 +899,16 @@ async function assign() {
             <option key={su.id} value={su.id}>{su.name}</option>
           ))}
         </select>
+
+          <select value={filterDisability} onChange={e=>setFilterDisability(e.target.value)}>
+    <option value="">كل الإعاقات</option>
+    {DISABILITIES.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
+  </select>
+
+  <select value={filterPlan} onChange={e=>setFilterPlan(e.target.value)}>
+    <option value="">كل الخطط</option>
+    {PLAN_TYPES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+  </select>
 
         <button className="ghost" onClick={refreshAssignments}>Refresh</button>
       </div>
