@@ -1,0 +1,101 @@
+@use './vars' as *;
+
+.auth-hero {
+  position: fixed;
+  inset: 0;
+  background:
+    $bg-overlay,
+    var(--auth-bg, url('../../public/images/bg.webp')) center/cover no-repeat;
+  display: grid;
+  place-items: center;
+  color: $txt;
+}
+
+.auth-card {
+  width: min(92vw, 560px);
+  background: $glass;
+  border: 1px solid $glass-border;
+  border-radius: $radius-2xl;
+  box-shadow: $shadow-2xl;
+  backdrop-filter: $blur;
+  -webkit-backdrop-filter: $blur;
+  padding: 28px 28px 32px;
+  animation: pop .35s $timing both;
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+    h2 { margin: 0; font-weight: 700; letter-spacing: .3px; }
+    .x {
+      all: unset; cursor: pointer; width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border-radius: 10px;
+      background: rgba(255,255,255,.08);
+      &:hover { background: rgba(255,255,255,.14); }
+    }
+  }
+
+  .tabs {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 14px;
+    button {
+      all: unset; text-align: center; padding: 10px 14px; border-radius: 12px;
+      background: rgba(255,255,255,.08); cursor: pointer; color: $muted;
+      &:hover { color: $txt; }
+      &.active { background: rgba(255,255,255,.16); color: $txt; }
+    }
+  }
+
+  form { display: grid; gap: 12px; }
+
+  .field {
+    display: grid; gap: 6px;
+    label { font-size: 13px; color: $muted; }
+    input, select {
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(15,0,30,.35);
+      color: $txt; padding: 12px 14px; border-radius: 12px;
+      outline: none; transition: border .18s $timing, background .18s $timing;
+      &::placeholder { color: #cbb9ff88; }
+      &:focus { border-color: #e9d7ff; background: rgba(35,0,60,.45); }
+    }
+  }
+
+  .row { display:flex; gap:10px; align-items:center; justify-content:space-between; }
+
+  .submit {
+    margin-top: 6px;
+    button {
+    width: 100%;
+    border: none;
+    background: #250c35;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    }
+  }
+
+  .meta {
+    margin-top: 10px; text-align: center; color: $muted; font-size: 13px;
+    button.link {
+      all: unset; color: $txt; cursor: pointer; font-weight: 700;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.auth-launcher {
+  position: fixed; top: 18px; right: 20px; z-index: 10;
+  button {
+    all: unset; color: $txt; background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    &:hover { background: rgba(255,255,255,.18); }
+  }
+}

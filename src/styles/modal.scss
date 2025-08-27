@@ -1,0 +1,47 @@
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  display: grid; place-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-card {
+  width: min(520px, 95vw);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.35);
+  overflow: hidden;
+}
+
+.modal-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.modal-head h3 {
+  margin: 0; font-size: 1.1rem; color: #f6eaff; font-weight: 800;
+}
+.icon-close {
+  background: transparent; border: 1px solid #ffffff26; color: #fff;
+  width: 32px; height: 32px; border-radius: 10px; font-size: 18px; line-height: 1;
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.confirm-text {
+  margin: 0 0 18px; color: #f6eaff;
+}
+
+.confirm-actions {
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+.confirm-actions .danger {
+  background: #ef444422;
+  border: 1px solid #ef444455;
+  color: #ff8a8a;
+}
