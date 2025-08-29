@@ -12,6 +12,7 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [school, setSchool] = useState('')
   const [role, setRole] = useState('teacher')
   const [busy, setBusy] = useState(false)
 
@@ -36,7 +37,7 @@ export default function Login() {
     e.preventDefault()
     try {
       setBusy(true)
-      const { profile } = await signUp(email, password, name, role)
+      const { profile } = await signUp(email, password, name, role, school)
       goByRole(profile?.role)
     } catch (err) {
       alert(err.message)
@@ -46,55 +47,60 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-hero">
+    <div className="auth-hero" dir="rtl" lang="ar">
       <div className="auth-card">
         <header>
-          <h2>{mode === 'login' ? 'Login' : 'Registration'}</h2>
+          <h2>{mode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب'}</h2>
           <button className="x" title="Close" onClick={()=>nav('/')}>✕</button>
         </header>
 
         <div className="tabs">
-          <button className={mode==='login'?'active':''} onClick={()=>setMode('login')}>Login</button>
-          <button className={mode==='register'?'active':''} onClick={()=>setMode('register')}>Register</button>
+<button className={mode==='login'?'active':''} onClick={()=>setMode('login')}>تسجيل الدخول</button>
+ <button className={mode==='register'?'active':''} onClick={()=>setMode('register')}>إنشاء حساب</button>
         </div>
 
         <form onSubmit={mode === 'login' ? handleLogin : handleRegister}>
           {mode === 'register' && (
             <>
               <div className="field">
-                <label>Full name</label>
+                 <label>الاسم الكامل</label>
                 <input value={name} onChange={e=>setName(e.target.value)} required />
               </div>
+               <div className="field">
+      <label>اسم المدرسة</label>
+      <input value={school} onChange={e=>setSchool(e.target.value)} required />
+    </div>
               <div className="field">
-                <label>Role</label>
+                <label>الدور</label>
                 <select value={role} onChange={e=>setRole(e.target.value)}>
-                  <option value="teacher">Teacher</option>
-                  <option value="admin">Admin</option>
-                </select>
+                  <option value="teacher">معلم</option>
+                  <option value="admin">مدير</option>
+                  </select>
               </div>
             </>
           )}
 
           <div className="field">
-            <label>Email</label>
+            <label>البريد الإلكتروني</label>
             <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required />
           </div>
 
           <div className="field">
-            <label>Password</label>
+          <label>كلمة المرور</label>
             <input type="password" value={password} onChange={e=>setPassword(e.target.value)} required />
           </div>
 
           <div className="submit">
             <button disabled={busy}>
-              {busy ? 'Please wait…' : (mode==='login' ? 'Login' : 'Create account')}
+             {busy ? 'يرجى الانتظار…' : (mode==='login' ? 'دخول' : 'إنشاء حساب')}
             </button>
           </div>
 
           <div className="meta">
             {mode==='login'
-              ? <>Don’t have an account? <button type="button" className="link" onClick={()=>setMode('register')}>Register</button></>
-              : <>Already have an account? <button type="button" className="link" onClick={()=>setMode('login')}>Login</button></>
+              ? <>ليس لديك حساب؟  <button type="button" className="link" onClick={()=>setMode('register')}>إنشاء حساب</button></>
+              : <>لديك حساب بالفعل؟ <button type="button" className="link" onClick={()=>setMode('login')}>تسجيل الدخول
+</button></>
             }
           </div>
         </form>

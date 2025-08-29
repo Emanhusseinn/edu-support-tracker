@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
     if (!uid) { setProfile(null); return null }
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, full_name, role')
+      .select('id, full_name, role, school_name')
       .eq('id', uid)
       .single()
     if (error) { setProfile(null); return null }
@@ -61,10 +61,10 @@ export function AuthProvider({ children }) {
     return { user: data.user, profile: p }
   }
 
-  async function signUp(email, password, full_name, role = 'teacher') {
+  async function signUp(email, password, full_name, role = 'teacher', school_name) {
     const { data, error } = await supabase.auth.signUp({
       email, password,
-      options: { data: { full_name, role } }
+       options: { data: { full_name, role, school_name } }
     })
     if (error) throw error
     // سِجّل دخوله مباشرة بعد الإنشاء

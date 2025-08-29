@@ -96,7 +96,7 @@
     background: rgba(255, 255, 255, 0.1);
     th {
       padding: 14px;
-      text-align: left;
+     text-align: right;
       font-weight: 600;
       font-size: 1.2rem;
     }
@@ -239,14 +239,6 @@ button.ghost {
   border-radius: 10px;
 }
 
-button {
-  background: #7c3aed;
-  border: 1px solid #8b5cf6;
-  color: white;
-  padding: 9px 14px;
-  border-radius: 12px;
-  font-weight: 700;
-}
 .panel-header .tools select {
   background: #1f1230;
   border: 1px solid #ffffff14;
@@ -380,12 +372,15 @@ button {
 }
 
 button {
-  background: #7c3aed;
-  border: 1px solid #8b5cf6;
-  color: white;
-  padding: 9px 14px;
-  border-radius: 12px;
-  font-weight: 700;
+    // background: #7c3aed;
+    // border: 1px solid #8b5cf6;
+    // color: white;
+    // padding: 9px 14px;
+    // border-radius: 12px;
+    // font-weight: 700;
+    // font-size: 22px;
+    // margin: 1rem;
+    // cursor: pointer;
 }
 
 button.danger { 

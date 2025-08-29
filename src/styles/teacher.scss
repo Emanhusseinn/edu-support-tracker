@@ -1,58 +1,357 @@
 .teacher-hero {
   min-height: 100vh;
-  background: radial-gradient(1200px 600px at 50% 10%, #ff7acb33 0%, transparent 60%),
-              linear-gradient(180deg, #2a0a33 0%, #1b0f23 100%);
+  background: radial-gradient(
+      1200px 600px at 50% 10%,
+      #ff7acb33 0%,
+      transparent 60%
+    ),
+    linear-gradient(180deg, #2a0a33 0%, #1b0f23 100%);
   padding: 3rem 40px 40px 40px;
   color: #f6eaff;
   direction: rtl;
   text-align: justify;
 }
-
-.teacher-top {
-  display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;
-  .who { .name{font-size:22px; font-weight:700;} .role{opacity:.7; font-size:14px;} }
-  .logout { background:#8b5cf6; border:0; padding:10px 16px; border-radius:12px; color:#fff; cursor:pointer; }
+.add-stu-btn, .logout{
+    background: #7c3aed;
+    border: 1px solid #8b5cf6;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 1rem;
+    cursor: pointer;
+        &.active,
+    &:hover {
+    background: #9b87ff;
+      border-color: #9b87ff;
+      box-shadow: 0 0 0 2px rgba(155, 135, 255, 0.25) inset;
+    }
 }
+.teacher-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  .who {
+    .name { 
+       display: flex;
+        gap: 11px;
+        align-items: center;
+        font-size: 22px;
+
+      .t-name{
+        font-size: 22px;
+        font-weight: 700;
+     
+      }
+      span {
+        vertical-align: middle;
+        margin-right: 8px;
+       font-size: 32px ;
+      }
+    }
+    .role {
+      opacity: 0.7;
+      font-size: 14px;
+    }
+  }
+  .logout {
+    background: #8b5cf6;
+    border: 0;
+    padding: 10px 16px;
+    border-radius: 12px;
+    color: #fff;
+    cursor: pointer;
+  }
+}
+.dashboard-area {
+    background: #20152a;
+    padding: 1rem;
+    border-radius: 11px;
 
 .cards {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:12px; margin-bottom:18px;
-  .card{
-    background:#2a2039; border:1px solid #3b2f4f; border-radius:16px;
-    padding:18px; text-align:center; cursor:pointer; transition:.2s ease;
-    &.active, &:hover{ border-color:#9b87ff; box-shadow:0 0 0 2px rgba(155,135,255,.25) inset; }
-    .card-title{ font-weight:700;font-size: 20px; }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+  .card {
+    background: #7c3aed;
+    border: 1px solid #8b5cf6;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 22px;
+    padding: 1rem;
+    text-align: center;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+        &.active,
+    &:hover {
+    background: #9b87ff;
+      border-color: #9b87ff;
+      box-shadow: 0 0 0 2px rgba(155, 135, 255, 0.25) inset;
+    }
+    .card-title {
+      font-weight: 700;
+      font-size: 20px;
+    }
   }
 }
 
 .students {
-  .bar { display:flex; justify-content:space-between; align-items:center; margin:6px 0 10px }
-  .student-list { display:flex; gap:8px; flex-wrap:wrap; }
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0 10px;
+  }
+  .student-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
   .student-chip {
+    color: white;
     font-size: 20px;
-    padding:8px 12px; border-radius:999px; background:#2a2039; border:1px solid #3b2f4f; cursor:pointer;
-    &.selected, &:hover{ border-color:#9b87ff; font-size: 20px;}
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #2a2039;
+    border: 1px solid #3b2f4f;
+    cursor: pointer;
+    &.selected,
+    &:hover {
+      border-color: #9b87ff;
+      font-size: 20px;
+    }
   }
 }
 
 .whiteboard {
-  margin-top:16px;
+  margin-top: 16px;
   .board {
-    background:#211831; border:1px solid #3b2f4f; border-radius:18px; padding:18px;
+    background: #211831;
+    border: 1px solid #3b2f4f;
+    border-radius: 18px;
+    padding: 18px;
   }
-  .board-head { font-size:14px; opacity:.85; margin-bottom:12px; }
-  .board-body { display:grid; grid-template-columns:280px 1fr; gap:20px; }
-  .status-circle{
-    width:220px; height:220px; border-radius:999px; display:flex; align-items:center; justify-content:center;
-    box-shadow: inset 0 0 0 6px rgba(255,255,255,.08);
-    .circle-label{ color:#111; background:#fff; padding:4px 10px; border-radius:8px; font-weight:700; }
+  .board-head {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 12px;
   }
-  .goal-row{
-    display:flex; align-items:center; justify-content:space-between; border-bottom:1px dashed #3b2f4f; padding:10px 0;
-    .goal-title{ font-weight:600; }
-    .goal-actions{ display:flex; align-items:center; gap:10px; }
-    .dot{ width:12px; height:12px; border-radius:999px; display:inline-block; }
-    select{ background:#2a2039; border:1px solid #3b2f4f; color:#e9e7f1; padding:6px 10px; border-radius:10px; }
+  .board-body {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+  }
+  .status-circle {
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 0 6px rgba(255, 255, 255, 0.08);
+    .circle-label {
+      color: #111;
+      background: #fff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+  }
+  .goal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px dashed #3b2f4f;
+    padding: 10px 0;
+    .goal-title {
+      font-weight: 600;
+    }
+    .goal-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+    select {
+      background: #2a2039;
+      border: 1px solid #3b2f4f;
+      color: #e9e7f1;
+      padding: 6px 10px;
+      border-radius: 10px;
+    }
+  }
+}
+}
+.hint {
+  opacity: 0.7;
+  padding: 10px 0;
+}
+
+/* تبويب الإضافة */
+.add-student-card {
+  background: #20152a;
+  border: 1px solid #ffffff14;
+  border-radius: 16px;
+  padding: 18px 18px 8px;
+  margin-top: 12px;
+
+  h3 {
+    margin: 0 0 14px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    span {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    input,
+    select {
+      background: #2a1f3a;
+      border: 1px solid #ffffff1a;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #fff;
+      outline: none;
+    }
+  }
+
+  .subjects-picker {
+    margin-top: 2rem;
+    .picker-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 1rem;
+      span {
+        font-weight: 600;
+      }
+      small {
+        opacity: 0.8;
+      }
+    }
+    .chips {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip-btn {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #ffffff1a;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      &.active {
+        background: #7c3aed;
+        border-color: transparent;
+      }
+    }
+  }
+
+  .subject-goals {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #1b1229;
+    border: 1px solid #ffffff12;
+    .sg-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .goals-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 8px;
+    }
+    .goal-item {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ffffff14;
+      background: #241737;
+      .title {
+        font-weight: 600;
+      }
+      .desc {
+        opacity: 0.8;
+        font-size: 13px;
+        grid-column: 2 / span 1;
+      }
+      &.checked {
+        border-color: #7c3aed;
+        box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15) inset;
+      }
+    }
+  }
+
+  .actions-row {
+    margin-top: 14px;
+  }
+  .primary {
+    background: #7c3aed;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .divider {
+    height: 1px;
+    background: #ffffff12;
+    margin: 16px 0;
+  }
+  .list-title {
+    margin: 0 0 8px;
+  }
+
+  .my-students {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 8px;
+    .chip {
+      background: #241737;
+      border: 1px solid #ffffff14;
+      border-radius: 12px;
+      padding: 10px 12px;
+      .name {
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .meta {
+        opacity: 0.85;
+        font-size: 13px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+    }
   }
 }
 
-.hint { opacity:.7; padding:10px 0; }
+/* باقي الستايل الموجود عندك يظل كما هو */
