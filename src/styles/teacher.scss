@@ -369,3 +369,34 @@
     &:disabled { opacity: .6; cursor: default; }
   }
 }
+
+
+
+/* داخل auth.scss (أو أي ملف ستايل مستخدم للصفحة) */
+
+.password-field .pwd-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field .pwd-wrap input {
+  width: 100%;
+  padding-inline-end: 40px; /* مساحة لأيقونة العين */
+}
+
+.password-field .pwd-toggle {
+  position: absolute;
+  inset-inline-end: 8px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 6px;
+  opacity: .85;
+}
+
+.password-field .pwd-toggle:hover {
+  opacity: 1;
+}
