@@ -102,7 +102,12 @@ export default function AdminDashboard() {
   }
 
   // ---------- BANK tab (Subjects -> Grades -> Objectives) ----------
-  const GRADES_FULL = [{ v: 0, t: 'روضة' }, ...Array.from({ length: 12 }, (_, i) => ({ v: i + 1, t: `${i + 1}` }))]
+  // const GRADES_FULL = [{ v: 0, t: 'روضة' }, ...Array.from({ length: 12 }, (_, i) => ({ v: i + 1, t: `${i + 1}` }))]
+  const GRADES_FULL = [
+  { v: 0,  t: 'KG1' },
+  { v: -1, t: 'KG2' },
+  ...Array.from({ length: 12 }, (_, i) => ({ v: i + 1, t: `${i + 1}` }))
+]
   const [bankSubject, setBankSubject] = useState('')
   const [bankGrade, setBankGrade] = useState(null) // 0..12
   const [bankObjectives, setBankObjectives] = useState([])
@@ -176,7 +181,7 @@ export default function AdminDashboard() {
     // fetch teachers + count of their students (via students table)
     const { data: teachersData, error: e1 } = await supabase
       .from('profiles')
-      .select('id, full_name, role, created_at')
+      .select('id, full_name, role, created_at, school_name')
       .eq('role', 'teacher')
       .order('created_at', { ascending: false })
     if (e1) { setTeachers([]); return }
@@ -190,8 +195,11 @@ export default function AdminDashboard() {
       if (!s.teacher_id) continue
       countMap.set(s.teacher_id, (countMap.get(s.teacher_id) || 0) + 1)
     }
-    setTeachers((teachersData || []).map(t => ({ ...t, student_count: countMap.get(t.id) || 0 })))
-  }
+ setTeachers((teachersData || []).map(t => ({
+   ...t,
+   student_count: countMap.get(t.id) || 0,
+   school_name: t.school_name || null
+ })))  }
 
   async function loadSubjects() {
     const { data, error } = await supabase.from('subjects').select('*').order('name')
@@ -418,6 +426,12 @@ export default function AdminDashboard() {
   const subjectsCount = subjects.length
   const studentsCount = students.length
 
+function gradeLabel(g) {
+  if (g === null || g === undefined) return '—'
+  if (g === 0) return 'KG1'
+  if (g === -1) return 'KG2'
+  return `الصف ${g}`
+}
   return (
     <div className="admin-hero" dir="rtl" lang="ar">
       <div className="admin-card">
@@ -444,14 +458,15 @@ export default function AdminDashboard() {
             <div className="table-container">
               <table className="styled-table">
                 <thead>
-                  <tr><th>الأسم</th><th>ID</th><th>عدد الطلاب</th><th></th></tr>
+                  <tr><th>الاسم</th><th>المدرسة</th><th>ID</th><th>عدد الطلاب</th><th></th></tr>
                 </thead>
                 <tbody>
                   {teachers.length === 0 ? (
-                    <tr><td colSpan={4} style={{textAlign:'center',opacity:.7}}>لا يوجد معلمين بعد.</td></tr>
+                    <tr><td colSpan={5} style={{textAlign:'center',opacity:.7}}>لا يوجد معلمين بعد.</td></tr>
                   ) : teachers.map(t => (
                     <tr key={t.id}>
                       <td>{t.full_name || '—'}</td>
+                      <td>{t.school_name || '—'}</td>
                       <td><code>{t.id}</code></td>
                       <td><span className="pill pill-count">{t.student_count ?? 0}</span></td>
                       <td><span className={`role-badge ${t.role}`}>{t.role}</span></td>
@@ -471,9 +486,9 @@ export default function AdminDashboard() {
               <div className="tools">
                 <input placeholder="اسم المادة الجديدة" value={newSubject} onChange={e=>setNewSubject(e.target.value)} />
                 <button onClick={()=>openConfirm({
-                  title: 'Add subject',
-                  message: `Add subject "${newSubject}"؟`,
-                  confirmLabel: 'Add',
+                  title: 'اضف مادة',
+                  message: `اضف مادة جديدة"${newSubject}"؟`,
+                  confirmLabel: 'اضافة',
                   onConfirm: async () => { await addSubject() },
                 })}>اضافة مادة</button>
                 <button className="ghost" onClick={loadSubjects}><IoIosRefresh /></button>
@@ -545,7 +560,7 @@ export default function AdminDashboard() {
                 ) : students.map(s => (
                   <tr key={s.id}>
                     <td>{s.full_name}</td>
-                    <td>{s.grade || '—'}</td>
+                   <td>{gradeLabel(s.grade)}</td>
                     <td>{(() => {
                       const t = teachers.find(x => x.id === s.teacher_id)
                       return t ? (t.full_name || '—') : '—'
@@ -706,8 +721,8 @@ export default function AdminDashboard() {
 
             {(bankSubject && bankGrade!==null) && (
               <div className="tools" style={{marginTop:12}}>
-                <input placeholder="Objective title" value={bankTitle} onChange={e=>setBankTitle(e.target.value)} />
-                <input placeholder="Description (optional)" value={bankDesc} onChange={e=>setBankDesc(e.target.value)} />
+                <input placeholder="اكتب الهدف هنا" value={bankTitle} onChange={e=>setBankTitle(e.target.value)} />
+                <input placeholder="ملاحظات (اختياري)" value={bankDesc} onChange={e=>setBankDesc(e.target.value)} />
                 <button onClick={addBankObjective} disabled={bankBusy || !bankTitle.trim()}>{bankBusy ? 'Working…' : 'اضافة هدف'}</button>
               </div>
             )}

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import Login from './pages/Login'
 import AdminDashboard from './pages/AdminDashboard'
-import TeacherDashboard from './pages/TeacherDashboard'
+import TeacherDashboard from './teacher/TeacherDashboard'
 import StudentProfile from './pages/StudentProfile'
 
 function ProtectedRoute({ children, allowed }) {

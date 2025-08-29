@@ -355,3 +355,17 @@
 }
 
 /* باقي الستايل الموجود عندك يظل كما هو */
+/* ==== Export Student Report (unique classes: esr-*) ==== */
+.esr-export {
+  display: flex; align-items: center; gap: 12px; margin-top: 10px;
+  .esr-label { opacity: .9; }
+  .esr-actions { display:flex; gap:8px; }
+  .esr-btn {
+    padding: 10px 14px; border-radius: 10px; border: 1px solid #ffffff22;
+    background: #7c3aed; color: #fff; cursor: pointer; font-weight: 600;
+    transition: transform .05s ease;
+    &:active { transform: translateY(1px); }
+    &.ghost { background: transparent; color: #ddd; }
+    &:disabled { opacity: .6; cursor: default; }
+  }
+}

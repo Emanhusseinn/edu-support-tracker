@@ -67,6 +67,13 @@ export function AuthProvider({ children }) {
        options: { data: { full_name, role, school_name } }
     })
     if (error) throw error
+     const userId = data.user?.id
+  if (userId) {
+    const { error: upErr } = await supabase
+      .from('profiles')
+      .upsert({ id: userId, full_name, role, school_name })
+    if (upErr) throw upErr
+  }
     // سِجّل دخوله مباشرة بعد الإنشاء
     const { data: d2, error: e2 } = await supabase.auth.signInWithPassword({ email, password })
     if (e2) throw e2
