@@ -85,6 +85,10 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut()
     setUser(null)
     setProfile(null)
+     localStorage.clear()
+        sessionStorage.clear()
+        indexedDB.deleteDatabase('supabase-auth')
+        window.location.href = "/login"
   }
 
   const value = { user, profile, loading, signIn, signUp, signOut, refreshProfile }
