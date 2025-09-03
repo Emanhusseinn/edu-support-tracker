@@ -13,9 +13,13 @@ import StudentProfile from './pages/StudentProfile'
 function ProtectedRoute({ children, allowed = [] }) {
   const { authReady, user, profile } = useAuth()
   const location = useLocation()
+  const hasSbToken =
+  typeof window !== 'undefined' &&
+  Object.keys(localStorage || {}).some(k => k.startsWith('sb-') && k.endsWith('-auth-token'))
 
-  if (!authReady) return <div style={{padding:16, color:'#b75050ff'}}>...جارِ التحميل</div>
-
+if (!authReady || (!user && hasSbToken)) {
+   return <div style={{padding:16, color:'#b75050ff'}}>...جارِ التحميل</div>
+}
   if (!user) {
     return <Navigate to="/login" replace state={{ from: location }} />
   }
@@ -30,9 +34,13 @@ function ProtectedRoute({ children, allowed = [] }) {
 
 function RedirectIfAuthed({ children }) {
   const { authReady, user, profile } = useAuth()
+   const hasSbToken =
+  typeof window !== 'undefined' &&
+  Object.keys(localStorage || {}).some(k => k.startsWith('sb-') && k.endsWith('-auth-token'))
 
-  if (!authReady) return <div style={{padding:16, color:'#c3ff00ff'}}>...جارِ التحميل</div>
-
+if (!authReady || (!user && hasSbToken)) {
+   return <div style={{padding:16, color:'#c3ff00ff'}}>...جارِ التحميل</div>
+}
   if (user) {
     const target = profile?.role === 'admin' ? '/admin' : '/teacher'
     return <Navigate to={target} replace />

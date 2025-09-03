@@ -11,6 +11,14 @@ export function AuthProvider({ children }) {
 
   const [authReady, setAuthReady] = useState(false)
 
+   function hasSbToken() {
+  if (typeof window === 'undefined') return false
+  try {
+    return Object.keys(localStorage || {}).some(
+      (k) => k.startsWith('sb-') && k.endsWith('-auth-token')
+    )
+  } catch { return false }
+}
   async function fetchProfile(uid) {
     if (!uid) {
       setProfile(null)
@@ -71,6 +79,7 @@ export function AuthProvider({ children }) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
     const p = await fetchProfile(data.user.id)
+    try { localStorage.setItem('profile-cache', JSON.stringify(p || {})) } catch {}
     return { user: data.user, profile: p }
   }
 
@@ -97,6 +106,7 @@ export function AuthProvider({ children }) {
     if (e2) throw e2
 
     const p = await fetchProfile(d2.user.id)
+    try { localStorage.setItem('profile-cache', JSON.stringify(p || {})) } catch {}
     return { user: d2.user, profile: p }
   }
 
