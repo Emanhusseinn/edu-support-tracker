@@ -70,7 +70,7 @@ export default function App() {
 // }, [])
 
   return (
-    <AutoLogoutEvery24h>
+   
     <AuthProvider>
       <BrowserRouter>
         <Routes>
@@ -123,6 +123,6 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </AuthProvider>
-     </AutoLogoutEvery24h>
+    
   )
 }
