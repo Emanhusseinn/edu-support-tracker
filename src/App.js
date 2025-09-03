@@ -62,12 +62,12 @@ function AutoLogoutEvery24h({ children }) {
 }
 
 export default function App() {
-  useEffect(() => {
-  // يمسح أي تخزين قديم كل مرة يفتح الموقع
-  localStorage.clear()
-  sessionStorage.clear()
-  indexedDB.deleteDatabase('supabase-auth')
-}, [])
+//   useEffect(() => {
+//   // يمسح أي تخزين قديم كل مرة يفتح الموقع
+//   localStorage.clear()
+//   sessionStorage.clear()
+//   indexedDB.deleteDatabase('supabase-auth')
+// }, [])
 
   return (
     <AutoLogoutEvery24h>

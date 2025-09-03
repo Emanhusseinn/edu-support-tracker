@@ -42,7 +42,7 @@ export default function Login() {
     try {
       setBusy(true)
       const FIXED_ROLE = 'teacher' // دايمًا teacher
-      const { profile } = await signUp(email, password, name, FIXED_ROLE, school)
+      const { profile } = await signUp(email, password, name, school)
       goByRole(profile?.role)
     } catch (err) {
       alert(err.message)
