@@ -14,7 +14,7 @@ function ProtectedRoute({ children, allowed = [] }) {
   const { authReady, user, profile } = useAuth()
   const location = useLocation()
 
-  if (!authReady) return null
+  if (!authReady) return <div style={{padding:16, color:'#b75050ff'}}>...جارِ التحميل</div>
 
   if (!user) {
     return <Navigate to="/login" replace state={{ from: location }} />
@@ -31,7 +31,7 @@ function ProtectedRoute({ children, allowed = [] }) {
 function RedirectIfAuthed({ children }) {
   const { authReady, user, profile } = useAuth()
 
-  if (!authReady) return null
+  if (!authReady) return <div style={{padding:16, color:'#c3ff00ff'}}>...جارِ التحميل</div>
 
   if (user) {
     const target = profile?.role === 'admin' ? '/admin' : '/teacher'
