@@ -21,6 +21,23 @@ import EditStudentPanel from './EditStudentPanel'
 
 export default function TeacherDashboard() {
   const { user, profile, signOut } = useAuth()
+  const [allSubjects, setAllSubjects] = useState([])
+  const [mySubjectIds, setMySubjectIds] = useState([])
+  const [loadingSubs, setLoadingSubs] = useState(true)
+
+    useEffect(() => {
+    if (!user) return
+    ;(async () => {
+      setLoadingSubs(true)
+      const [{ data: all }, { data: mine }] = await Promise.all([
+        supabase.from('subjects').select('id,name').order('name'),
+        supabase.from('teacher_subjects').select('subject_id').eq('teacher_id', user.id),
+      ])
+      setAllSubjects(all || [])
+      setMySubjectIds((mine || []).map(r => r.subject_id))
+      setLoadingSubs(false)
+    })()
+  }, [user?.id])
 // بدل:
  // const [tab, setTab] = useState('add')
  // const [selSubject, setSelSubject] = useState(null)
@@ -127,7 +144,9 @@ useEffect(() => {
         <AddStudentForm
           teacher={user}
           profile={profile}
-          allSubjects={subjects}
+          allSubjects={allSubjects}
+          initialSelectedSubjects={mySubjectIds}
+          onSubjectsChange={setMySubjectIds}
           onStudentAdded={onStudentAdded}
           myStudents={myStudents}
           loadMyBusy={loadMyBusy}

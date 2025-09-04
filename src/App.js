@@ -9,11 +9,22 @@ import StudentProfile from './pages/StudentProfile'
 
 function ProtectedRoute({ children, allowed }) {
   const { user, profile, loading } = useAuth()
-  if (loading) return <div style={{ padding: 40 }}>Loading...</div>
+
   if (!user) return <Navigate to="/login" replace />
-  if (allowed && !allowed.includes(profile?.role)) return <div style={{ padding: 40 }}>Access denied</div>
+
+  // طالما في user ولسه ما جبنا profile، لا ترفضي — استني
+  if (loading || (user && !profile)) {
+    return <div style={{ padding: 40 }}>Loading...</div>
+  }
+
+  // ارفضي فقط لو الدور معروف ومش مسموح
+  if (allowed && profile?.role && !allowed.includes(profile.role)) {
+    return <div style={{ padding: 40 }}>Access denied</div>
+  }
+
   return children
 }
+
 
 function RedirectIfAuthed({ children }) {
   const { user, profile, loading } = useAuth()

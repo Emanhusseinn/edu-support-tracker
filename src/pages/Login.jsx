@@ -24,25 +24,27 @@ export default function Login() {
     nav(role === 'admin' ? '/admin' : '/teacher', { replace: true })
   }
 
-  async function handleLogin(e) {
-    e.preventDefault()
-    try {
-      setBusy(true)
-      const { profile } = await signIn(email, password)
-      goByRole(profile?.role)
-    } catch (err) {
-      alert(err.message)
-    } finally {
-      setBusy(false)
-    }
+async function handleLogin(e) {
+  e.preventDefault()
+  try {
+    setBusy(true)
+    const { profile } = await signIn(email, password)
+    goByRole(profile?.role)
+  } catch (err) {
+    console.error('LOGIN ERROR:', err) // شوفي Network tab
+    alert(err?.message || 'Network error')
+  } finally {
+    setBusy(false)
   }
+}
+
 
   async function handleRegister(e) {
     e.preventDefault()
     try {
       setBusy(true)
       const FIXED_ROLE = 'teacher' // دايمًا teacher
-      const { profile } = await signUp(email, password, name, school)
+      const { profile } = await signUp(email, password, name, 'teacher', school)
       goByRole(profile?.role)
     } catch (err) {
       alert(err.message)

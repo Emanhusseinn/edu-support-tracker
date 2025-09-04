@@ -3,19 +3,23 @@ import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../supabaseClient'
 import { DISABILITIES, PLAN_TYPES, GRADES_FULL } from '../constants/school'
 
-export default function AddStudentForm({
-  teacher, profile, allSubjects,
-  onStudentAdded, // (studentId, firstSubjectId?) => void
-  myStudents, loadMyBusy
-}) {
+ export default function AddStudentForm({
+   teacher, profile, allSubjects, initialSelectedSubjects = [],
+   onSubjectsChange = () => {},
+   onStudentAdded, myStudents, loadMyBusy
+ }) {
   const [stName, setStName] = useState('')
   const [stGrade, setStGrade] = useState('')
   const [stDisability, setStDisability] = useState('')
   const [stPlan, setStPlan] = useState('')
   const [adding, setAdding] = useState(false)
-  const [selectedSubjects, setSelectedSubjects] = useState([])
+  // const [selectedSubjects, setSelectedSubjects] = useState([])
+  const [selectedSubjects, setSelectedSubjects] = useState(initialSelectedSubjects)
   const [subjObjectives, setSubjObjectives] = useState({})
   const [selectedObjIds, setSelectedObjIds] = useState({})
+
+   // مزامنة لو تغيّر initialSelectedSubjects من الـ Dashboard بعد أول تحميل
+ useEffect(() => { setSelectedSubjects(initialSelectedSubjects) }, [initialSelectedSubjects])
 
   async function loadObjectivesForSubject(subjectId, gradeVal) {
     if (!subjectId || gradeVal==='' || gradeVal===null || gradeVal===undefined) return
@@ -30,14 +34,47 @@ export default function AddStudentForm({
     for (const sid of selectedSubjects) await loadObjectivesForSubject(sid, stGrade)
   })() }, [stGrade]) // eslint-disable-line
 
-  function toggleSubject(subjectId) {
-    setSelectedSubjects(prev => {
-      const exists = prev.includes(subjectId)
-      const next = exists ? prev.filter(x=>x!==subjectId) : [...prev, subjectId]
-      if (!exists && stGrade!=='') loadObjectivesForSubject(subjectId, stGrade)
-      return next
-    })
-  }
+  // function toggleSubject(subjectId) {
+  //   setSelectedSubjects(prev => {
+  //     const exists = prev.includes(subjectId)
+  //     const next = exists ? prev.filter(x=>x!==subjectId) : [...prev, subjectId]
+  //     if (!exists && stGrade!=='') loadObjectivesForSubject(subjectId, stGrade)
+  //     return next
+  //   })
+  // }
+  
+   async function toggleSubject(subjectId) {
+   setSelectedSubjects(prev => {
+     const exists = prev.includes(subjectId)
+     const next = exists ? prev.filter(x=>x!==subjectId) : [...prev, subjectId]
+     return next
+   })
+   try {
+     const exists = selectedSubjects.includes(subjectId)
+     if (!exists) {
+       // اربط المادة بالمعلّم
+       await supabase.from('teacher_subjects')
+         .upsert({ teacher_id: teacher?.id, subject_id: subjectId }, { onConflict: 'teacher_id,subject_id' })
+       if (stGrade!=='') await loadObjectivesForSubject(subjectId, stGrade)
+     } else {
+       // فك الربط
+       await supabase.from('teacher_subjects')
+         .delete().eq('teacher_id', teacher?.id).eq('subject_id', subjectId)
+       setSubjObjectives(prev => { const c={...prev}; delete c[subjectId]; return c })
+       setSelectedObjIds(prev => { const c={...prev}; delete c[subjectId]; return c })
+     }
+     onSubjectsChange && onSubjectsChange(prev => {
+       const existsNow = selectedSubjects.includes(subjectId)
+       return existsNow
+         ? prev.filter(x=>x!==subjectId)
+         : [...prev, subjectId]
+     })
+   } catch (e) {
+     console.error('link subject failed', e)
+     alert('لم يتم حفظ اختيار المادة')
+   }
+ }
+
   function toggleObjective(subjectId, objectiveId) {
     setSelectedObjIds(prev => {
       const set = new Set(prev[subjectId] || [])

@@ -92,5 +92,78 @@ export function AuthProvider({ children }) {
   }
 
   const value = { user, profile, loading, signIn, signUp, signOut, refreshProfile }
+
+
+
+
+  // 0) الخروج القاسي
+async function hardLogout(reason = '') {
+  try { await supabase.auth.signOut({ scope: 'global' }); } catch {}
+  try {
+    localStorage.clear();
+    sessionStorage.clear();
+    try { indexedDB.deleteDatabase('supabase-auth'); } catch {}
+  } catch {}
+  window.location.replace('/login');
+}
+
+// 1) اسمع أمر الطرد من أي تاب/كل الأجهزة
+useEffect(() => {
+  // كل التابات في نفس المتصفح
+  const onStorage = (e) => {
+    if (e.key === 'APP_LOGOUT_ALL' && e.newValue) hardLogout('storage');
+  };
+  window.addEventListener('storage', onStorage);
+
+  // Realtime broadcast: الأجهزة المتصلة الآن
+  const chGlobal = supabase.channel('admin-global');
+  chGlobal.on('broadcast', { event: 'logout_all' }, () => hardLogout('broadcast'));
+  chGlobal.subscribe();
+
+  return () => {
+    window.removeEventListener('storage', onStorage);
+    supabase.removeChannel(chGlobal);
+  };
+}, []);
+
+// 2) اسمع تغيّر نسخة الـ logout (للأونلاين الآن، وللأوفلاين عند التشغيل)
+useEffect(() => {
+  async function checkVersion() {
+    const { data } = await supabase
+      .from('app_kv')
+      .select('value')
+      .eq('key', 'logout_version')
+      .single();
+
+    const current = Number(data?.value || 0);
+    const seen = Number(localStorage.getItem('logout_version_seen') || 0);
+
+    if (current > seen) {
+      localStorage.setItem('logout_version_seen', String(current));
+      await hardLogout('version');
+    }
+  }
+
+  // فحص لحظي عند الإقلاع
+  checkVersion();
+
+  // استماع لأي تحديث من الداتابيس
+  const chKV = supabase.channel('kv')
+    .on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'app_kv',
+      filter: 'key=eq.logout_version',
+    }, checkVersion)
+    .subscribe();
+
+  return () => supabase.removeChannel(chKV);
+}, []);
+  
+
+
+
+
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
