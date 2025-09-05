@@ -26,8 +26,8 @@ export default function TeacherDashboard() {
   const [loadingSubs, setLoadingSubs] = useState(true)
 
     useEffect(() => {
-    if (!user) return
-    ;(async () => {
+    if (!user) return;
+    (async () => {
       setLoadingSubs(true)
       const [{ data: all }, { data: mine }] = await Promise.all([
         supabase.from('subjects').select('id,name').order('name'),
