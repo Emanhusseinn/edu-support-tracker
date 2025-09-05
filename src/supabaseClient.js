@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 
-const url = process.env.REACT_APP_SUPABASE_URL
-const anonKey = process.env.REACT_APP_SUPABASE_ANON_KEY
+const isProd = process.env.NODE_ENV === 'production';
+const url = isProd ? '/api/sb' : process.env.REACT_APP_SUPABASE_URL;
+const anonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
 
 if (!url || !anonKey) {
   console.error('❌ Supabase ENV missing:', { urlPresent: !!url, keyPresent: !!anonKey })
