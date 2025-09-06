@@ -7,27 +7,30 @@ import { IoIosRefresh } from "react-icons/io";
 
 // ---------- constants ----------
 export const DISABILITIES = [
-  { value: 'none', label: 'بدون' },
-  { value: 'visual', label: 'بصرية' },
-  { value: 'hearing', label: 'سمعية' },
-  { value: 'intellectual', label: 'ذهنية' },
-  { value: 'autism', label: 'طيف التوحد' },
-  { value: 'learning', label: 'صعوبات تعلم' },
-  { value: 'speech', label: 'نطق/لغة' },
-  { value: 'adhd', label: 'فرط حركة/نقص انتباه' },
-  { value: 'physical', label: 'حركية' },
-  { value: 'multiple', label: 'متعددة' },
-  { value: 'other', label: 'أخرى' },
+  { value:'hearing', label:'الإعاقة السمعية' },
+  { value:'visual', label:'الإعاقة البصرية' },
+  { value:'intellectual', label:'الإعاقة الذهنية' },
+  { value:'physical', label:'الإعاقة الجسدية' },
+  { value:'autism', label:'اضطرابات طيف التوحد' },
+  { value:'psychological', label:'الاضطرابات النفسية' },
+  { value:'communication', label:'اضطرابات التواصل' },
+  { value:'learning', label:'صعوبات التعلم المحددة' },
+  { value:'adhd', label:'اضطرابات قصور الانتباه والنشاط الزائد' },
+  { value:'multiple', label:'الإعاقة المتعددة' },
+  { value:'hearing_visual', label:'الإعاقة السمعية البصرية' },
+  { value:'health', label:'الأمراض والظروف الصحية' },
+  { value:'unspecified', label:'غير مصنف' },
+  { value:'other', label:'أخرى' },
 ]
 
 export const PLAN_TYPES = [
-  { value: 'iep',      label: 'خطة فردية (IEP)' },
-  { value: 'behavior', label: 'خطة سلوكية' },
-  { value: 'remedial', label: 'خطة علاجية/تقوية' },
-  { value: 'support',  label: 'خطة دعم' },
-  { value: 'gifted',   label: 'خطة للموهوبين' },
-  { value: 'rehab',    label: 'تأهيلية' },
-  { value: 'other',    label: 'أخرى' },
+  { value:'accommodation', label:'خطة فردية تكيف' },
+  { value:'modification', label:'خطة فردية تعديل' },
+  { value:'remedial', label:'خطة علاجية' },
+  { value:'gifted', label:'خطة اثرائية' },
+  { value:'support', label:'خطة دعم' },
+  { value:'rehab', label:'خطة تأهيلية' },
+  { value:'other', label:'أخرى' },
 ]
 
 // ============================================
