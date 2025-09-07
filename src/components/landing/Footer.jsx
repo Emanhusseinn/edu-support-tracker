@@ -7,7 +7,7 @@ const Footer = () => {
       <div style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
         
         {/* Logo */}
-        <img src={logo} alt="بنك الأهداف" style={{ height: "60px", marginBottom: "1rem" }} />
+        <img src={logo} alt="بنك الأهداف" style={{ height: "60px", marginBottom: "1rem" , borderRadius: "20px", border: "6px solid #2e1436"}} />
 
         {/* Links */}
         <nav style={{ marginBottom: "1rem" }}>

@@ -33,7 +33,7 @@ const Navbar = () => {
         justifyContent: "space-between",
       }}>
         {/* الشعار */}
-        <img src={logo} alt="بنك الأهداف" style={{ height: "50px" }} />
+        <img src={logo} alt="بنك الأهداف" style={{ height: "50px",  borderRadius: "20px", border: "6px solid #2e1436" }} />
 
         {/* التابات */}
         <ul style={{
