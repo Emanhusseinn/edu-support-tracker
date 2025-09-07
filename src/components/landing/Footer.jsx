@@ -24,7 +24,7 @@ const Footer = () => {
           © {new Date().getFullYear()} بنك الأهداف | جميع الحقوق محفوظة
         </p>
         <p style={{ fontSize: "0.9rem", color: "#aaa", marginTop: "0.5rem" }}>
-          تصميم وتنفيذ وإعداد: <span style={{ color: "#f1c40f" }}>الأستاذة فدوى زغل</span>
+          تصميم وتنفيذ وإعداد: <span style={{ color: "#f1c40f" }}>الأستاذة فدوى الزغل</span>
         </p>
       </div>
     </footer>
