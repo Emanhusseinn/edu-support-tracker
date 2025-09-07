@@ -7,24 +7,24 @@ import AdminDashboard from './pages/AdminDashboard'
 import TeacherDashboard from './teacher/TeacherDashboard'
 import StudentProfile from './pages/StudentProfile'
 
+// Landing Page الجديدة
+import LandingPage from './components/landing/LandingPage'
+
 function ProtectedRoute({ children, allowed }) {
   const { user, profile, loading } = useAuth()
 
   if (!user) return <Navigate to="/login" replace />
 
-  // طالما في user ولسه ما جبنا profile، لا ترفضي — استني
   if (loading || (user && !profile)) {
     return <div style={{ padding: 40 }}>Loading...</div>
   }
 
-  // ارفضي فقط لو الدور معروف ومش مسموح
   if (allowed && profile?.role && !allowed.includes(profile.role)) {
     return <div style={{ padding: 40 }}>Access denied</div>
   }
 
   return children
 }
-
 
 function RedirectIfAuthed({ children }) {
   const { user, profile, loading } = useAuth()
@@ -41,7 +41,10 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<RedirectIfAuthed><Navigate to="/login" replace /></RedirectIfAuthed>} />
+          {/* Landing page as default route */}
+          <Route path="/" element={ <RedirectIfAuthed><LandingPage/> </RedirectIfAuthed>} />
+
+          {/* Login */}
           <Route
             path="/login"
             element={
@@ -50,6 +53,8 @@ export default function App() {
               </RedirectIfAuthed>
             }
           />
+
+          {/* Admin */}
           <Route
             path="/admin"
             element={
@@ -58,6 +63,8 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Teacher */}
           <Route
             path="/teacher"
             element={
@@ -66,6 +73,8 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Student Profile */}
           <Route
             path="/student/:id"
             element={
@@ -74,7 +83,9 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+
+          {/* Fallback */}
+           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

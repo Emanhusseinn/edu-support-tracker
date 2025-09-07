@@ -1,0 +1,233 @@
+.contact-section {
+  background-color: #121212;
+  padding: 4rem 1rem;
+  text-align: center;
+  color: #f1c40f;
+
+  .title {
+    font-size: 2rem;
+    color: #f1c40f;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 2rem;
+  }
+
+  .contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    input,
+    textarea {
+      padding: 0.8rem 1rem;
+      border: 2px solid #8e44ad;
+      border-radius: 8px;
+      background: #1e1e1e;
+      color: #fff;
+      font-size: 1rem;
+
+      &:focus {
+        outline: none;
+        border-color: #f1c40f;
+      }
+    }
+
+    button {
+      background: linear-gradient(90deg, #8e44ad, #f1c40f);
+      color: #121212;
+      font-weight: bold;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+
+      &:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+      }
+    }
+  }
+}
+
+
+.privacy-section {
+  background-color: #1e1e1e;
+  padding: 4rem 1rem;
+  color: #f1c40f;
+  text-align: center;
+
+  .title {
+    font-size: 2rem;
+    color: #f1c40f;
+    margin-bottom: 1.5rem;
+  }
+
+  .text {
+    max-width: 800px;
+    margin: 0 auto 1rem;
+    line-height: 1.8;
+    font-size: 1rem;
+    color: #ddd;
+
+    .highlight {
+      color: #8e44ad;
+      font-weight: bold;
+    }
+  }
+}
+
+
+.services-section {
+    background-color: #3a2e42;
+    padding: 4rem 1rem;
+    color: #ffffff;
+    text-align: center;
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #f1c40f;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .service-card {
+    background: linear-gradient(145deg, #1e1e1e, #2c2c2c);
+    border: 2px solid #8e44ad;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    h3 {
+      font-size: 1.2rem;
+      color: #ffffff;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(142, 68, 173, 0.5);
+      border-color: #f1c40f;
+    }
+  }
+}
+
+
+.about-section {
+background-color: #451452;
+  padding: 4rem 1rem;
+  color: #ddd;
+  text-align: center;
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #f1c40f;
+  }
+
+  .intro {
+    max-width: 850px;
+    margin: 0 auto 2rem;
+    line-height: 1.9;
+    font-size: 1.1rem;
+
+    .highlight {
+      color: #8e44ad;
+      font-weight: bold;
+    }
+  }
+
+  .about-list {
+    list-style: none;
+    padding: 0;
+    max-width: 750px;
+    margin: 0 auto;
+    text-align: right;
+
+    li {
+      background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+      border-left: 4px solid #8e44ad;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.2rem;
+      border-radius: 8px;
+      color: #fff;
+      text-align: right;
+      direction: rtl;
+      line-height: 1.7;
+      transition: 0.3s ease;
+
+      strong {
+        color: #f1c40f;
+      }
+
+      &:hover {
+        border-left-color: #f1c40f;
+        transform: translateX(-5px);
+      }
+    }
+  }
+}
+
+
+.hero-section {
+  position: relative;
+  height: 100vh;
+  background: linear-gradient(rgba(18, 18, 18, 0.526), rgba(18, 18, 18, 0.384)),
+              url("/assets/bg.webp") center/cover no-repeat; // غيري الصورة حسب اختيارك
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+
+  .overlay {
+    max-width: 800px;
+    padding: 2rem;
+    margin-top: 2rem;
+  }
+
+  .hero-logo {
+    height: 100px;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #f1c40f;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #ddd;
+    margin-bottom: 2rem;
+  }
+
+  .hero-btn {
+    background: linear-gradient(90deg, #8e44ad, #f1c40f);
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    color: #121212;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+
+    &:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+  }
+}

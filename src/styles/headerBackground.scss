@@ -1,0 +1,24 @@
+/* src/components/HeaderBackground.scss */
+.header-background {
+width: 100%;
+height: 100%;
+  .overlay {
+    background: rgb(0 0 0 / 13%);
+    padding: 1px 40px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 1rem 0;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    margin-top: 5px;
+    font-size: 18px;
+  }
+}

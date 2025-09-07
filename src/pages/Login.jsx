@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import '../styles/auth.scss'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
+import HeaderBackground from '../components/HeaderBackground'
 
 export default function Login() {
   const { signIn, signUp } = useAuth()
@@ -55,6 +56,7 @@ async function handleLogin(e) {
 
   return (
     <div className="auth-hero" dir="rtl" lang="ar">
+       {/* <HeaderBackground /> */}
       <div className="auth-card">
         <header>
           <h2>{mode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب'}</h2>
